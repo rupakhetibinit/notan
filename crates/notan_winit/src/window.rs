@@ -7,7 +7,8 @@ use winit::dpi::{LogicalPosition, LogicalSize, PhysicalPosition};
 use winit::event_loop::EventLoop;
 use winit::window::Fullscreen::Borderless;
 use winit::window::{
-    CursorGrabMode, CursorIcon as WCursorIcon, Icon, Window, WindowBuilder, WindowLevel,
+    CursorGrabMode, CursorIcon as WCursorIcon, Icon, Window, WindowBuilder, WindowButtons,
+    WindowLevel,
 };
 
 pub struct WinitWindowBackend {
@@ -272,6 +273,10 @@ impl WinitWindowBackend {
                 &config.window_icon_path,
                 &config.window_icon_data,
             ));
+
+        if !config.resizable {
+            builder = builder.with_enabled_buttons(!WindowButtons::MAXIMIZE)
+        }
 
         #[cfg(target_os = "windows")]
         {
